@@ -2,7 +2,7 @@
 
 Sistema de comércio eletrônico desenvolvido para testar meus conhecimentos utilizando Adonis.js.
 
-![image](https://github.com/user-attachments/assets/51c71d8a-18d8-466d-a2df-25890dcba78f)
+![image](https://github.com/user-attachments/assets/6fffdc07-6136-471f-acf8-7666e5e3d5d8)
 
 
 ## Instalação do Desenvolvimento
