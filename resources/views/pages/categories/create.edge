@@ -1,0 +1,54 @@
+@layouts.app()
+<main class="bg-white min-h-screen py-16 flex items-center justify-center">
+  <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <!-- Cabeçalho da Seção -->
+    <div class="bg-[#f0e0c2] p-6 rounded-t-lg shadow-sm text-center">
+      <h1 class="text-2xl font-bold text-gray-800">Criar Categoria</h1>
+      <p class="text-sm text-gray-600">Adicione uma nova categoria ao sistema</p>
+    </div>
+
+    <!-- Formulário de Criação -->
+    <div class="p-6">
+      <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <!-- Nome da Categoria -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nome da Categoria</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Digite o nome da categoria"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]"
+            required
+          />
+        </div>
+
+        <!-- Imagem da Categoria -->
+        <div>
+          <label for="image" class="block text-sm font-medium text-gray-700">Imagem da Categoria</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            class="mt-1 w-full text-sm text-gray-600 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]"
+          />
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-between">
+          <a href="{{ route('categories.index') }}"
+            class="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow hover:bg-gray-500 transition">
+            Cancelar
+          </a>
+          <button
+            type="submit"
+            class="px-6 py-2 bg-[#ffcd85] text-gray-800 font-semibold rounded-lg shadow hover:bg-[#ffb95e] transition">
+            Criar Categoria
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+@end

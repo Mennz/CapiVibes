@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CapiVibes</title>
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <section class="w-full px-6 pb-12 antialiased bg-white">
+      <div class="mx-auto max-w-7xl">
+        @include('components/layouts/partials/header')
+
+        <div>
+          {{{ await $slots.main() }}}
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-[#f2e2c4] text-black py-10">
+  <div class="container mx-auto px-4">
+    <!-- Promoções -->
+    <div class="text-center mb-10">
+      <h2 class="text-xl font-bold">Receba Promoções e Ofertas!</h2>
+      <p class="text-sm text-black-300 mt-2">
+        Receba novidades e promoções exclusivas diretamente no seu email.
+      </p>
+      <form action="/newsletter" method="POST" class="mt-4 flex justify-center items-center gap-2">
+        <input
+          type="email"
+          name="email"
+          placeholder="Digite seu email"
+          class="px-4 py-2 rounded-lg text-black-800"
+        />
+        <button
+          type="submit"
+          class="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-black font-medium rounded-lg transition"
+        >
+          Assinar
+        </button>
+      </form>
+    </div>
+
+    <!-- Links úteis, Contato e Redes Sociais -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
+      <!-- Sobre Nós -->
+      <div>
+        <h3 class="font-semibold mb-4">Sobre Nós</h3>
+        <p>
+          Bem-vindo ao Capivibes, sua loja de instrumentos musicais favorita! Explore nosso acervo
+          de violões, guitarras, teclados e muito mais para levar música ao seu dia.
+        </p>
+      </div>
+
+      
+
+      <!-- Links Úteis -->
+      <div>
+        <h3 class="font-semibold mb-4">Links Úteis</h3>
+        <ul class="space-y-2">
+          <li><a href="/" class="hover:text-orange-400">Página Inicial</a></li>
+          <li><a href="/products" class="hover:text-orange-400">Produtos</a></li>
+          <li><a href="/help" class="hover:text-orange-400">Ajuda e Suporte</a></li>
+        </ul>
+      </div>
+
+    
+
+      <!-- Redes Sociais -->
+      <div>
+        <h3 class="font-semibold mb-4"></h3>
+        <div class="flex space-x-4">
+         
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="text-center text-sm text-gray-400 mt-10">
+      &copy; 2024 Capivibes. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

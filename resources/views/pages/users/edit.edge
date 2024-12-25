@@ -1,0 +1,95 @@
+@layouts.app()
+<div class="bg-white min-h-screen pt-36 flex items-center justify-center">
+  <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <!-- Header do Formulário -->
+    <div class="bg-[#f0e0c2] p-6 text-center rounded-t-lg shadow-sm">
+      <h1 class="text-2xl font-bold text-gray-800">Editar Perfil</h1>
+      <p class="text-sm text-gray-600">Atualize suas informações pessoais</p>
+    </div>
+
+    <!-- Formulário de Edição -->
+    <div class="p-6 space-y-6">
+      @form({
+        action: route('users.update'),
+        method: 'POST',
+        class: 'space-y-6',
+      })
+      <!-- Nome -->
+      <div>
+        <label for="fullName" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+        @!input({
+          type: 'text',
+          name: 'fullName',
+          value: user.fullName,
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]'
+        })
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        @!input({
+          type: 'email',
+          name: 'email',
+          value: user.email,
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]'
+        })
+      </div>
+
+      <!-- CPF -->
+      <div>
+        <label for="cpf" class="block text-sm font-medium text-gray-700">CPF</label>
+        @!input({
+          type: 'text',
+          name: 'cpf',
+          value: user.cpf,
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]'
+        })
+      </div>
+
+      <!-- Telefone -->
+      <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700">Celular</label>
+        @!input({
+          type: 'text',
+          name: 'phone',
+          value: user.phone,
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85]'
+        })
+      </div>
+
+      <!-- Gênero -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Gênero</label>
+        <div class="flex items-center space-x-4 mt-2">
+          <label class="inline-flex items-center">
+            <input type="radio" name="gender" value="Masculino" {{ user.gender === 'Masculino' ? 'checked' : '' }} class="form-radio text-[#ffcd85]">
+            <span class="ml-2">Masculino</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="gender" value="Feminino" {{ user.gender === 'Feminino' ? 'checked' : '' }} class="form-radio text-[#ffcd85]">
+            <span class="ml-2">Feminino</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="gender" value="Outro" {{ user.gender === 'Outro' ? 'checked' : '' }} class="form-radio text-[#ffcd85]">
+            <span class="ml-2">Outro</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="flex justify-between">
+        <a href="{{ route('users.profile') }}" class="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow hover:bg-gray-500 transition">
+          Cancelar
+        </a>
+        @button({
+          class: 'px-6 py-2 bg-[#ffcd85] text-gray-800 font-semibold rounded-lg shadow hover:bg-[#ffb95e] transition',
+        })
+        Salvar
+        @end
+      </div>
+      @end
+    </div>
+  </div>
+</div>
+@end

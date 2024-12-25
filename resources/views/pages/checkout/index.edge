@@ -1,0 +1,90 @@
+@layouts.app()
+
+<main class="bg-white-100 min-h-screen py-16">
+  <div class="container mx-auto px-6">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Finalizar Compra</h1>
+
+    @if(cart && cart.length > 0)
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- Resumo do Carrinho -->
+        <div class="grid grid-cols-1 gap-6">
+          @each(item in cart)
+            <div class="flex items-center justify-between border-b pb-4">
+              <!-- Detalhes do Produto -->
+              <div class="flex items-center space-x-4">
+                <img 
+                  src="{{ item.imageUrl || '/images/placeholder.png' }}" 
+                  alt="{{ item.name }}" 
+                  class="w-20 h-20 object-cover rounded-lg shadow"
+                >
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-800">{{ item.name }}</h2>
+                  <p class="text-sm text-gray-500">Quantidade: <span class="font-medium">{{ item.quantity }}</span></p>
+                  <p class="text-sm text-gray-500">Preço Unitário: R$ {{ item.price.toFixed(2) }}</p>
+                  <p class="text-sm text-gray-600 mt-1">Subtotal: <span class="font-bold">R$ {{ (item.price * item.quantity).toFixed(2) }}</span></p>
+                </div>
+              </div>
+            </div>
+          @endeach
+        </div>
+      </div>
+
+      <!-- Formulário de Checkout -->
+      <form method="POST" action="/checkout/process" class="bg-white rounded-lg shadow-md p-6 mt-6 space-y-4">
+        <!-- Endereço -->
+        <div>
+          <label for="address" class="block font-semibold text-gray-800">Endereço de Entrega</label>
+          <textarea 
+            id="address" 
+            name="address" 
+            class="w-full p-2 border rounded" 
+            required
+          ></textarea>
+        </div>
+
+        <!-- Método de Pagamento -->
+        <div>
+          <label for="paymentMethod" class="block font-semibold text-gray-800">Método de Pagamento</label>
+          <select 
+            id="paymentMethod" 
+            name="paymentMethod" 
+            class="w-full p-2 border rounded" 
+            required
+          >
+            <option value="credit_card">Cartão de Crédito</option>
+            <option value="boleto">Boleto Bancário</option>
+            <option value="pix">Pix</option>
+          </select>
+        </div>
+
+        <!-- Total Geral -->
+        <div class="bg-gray-50 rounded-lg p-4 shadow-md">
+          <p class="text-lg font-semibold">
+            Total a Pagar: 
+            <span class="text-green-600 font-bold">R$ {{ totalPrice.toFixed(2) }}</span>
+          </p>
+        </div>
+
+        <!-- Botão de Finalizar -->
+        <button 
+          type="submit" 
+          class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-600 transition"
+        >
+          Finalizar Compra
+        </button>
+      </form>
+    @else
+      <!-- Carrinho Vazio -->
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <p class="text-gray-500 text-lg">Seu carrinho está vazio.</p>
+        <a href="/products" 
+          class="inline-block mt-4 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
+        >
+          Ver Produtos
+        </a>
+      </div>
+    @endif
+  </div>
+</main>
+
+@end

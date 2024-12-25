@@ -1,0 +1,122 @@
+@layouts.app()
+<main class="bg-white min-h-screen py-40">
+  <div class="container mx-auto px-4">
+    <!-- Título -->
+    <div class="bg-[#f0e0c2] p-6 rounded-t-lg shadow-sm text-center">
+      <h1 class="text-3xl font-bold text-gray-800">Editar Produto</h1>
+    </div>
+
+    <!-- Formulário de Edição -->
+    <div class="mt-10 max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6">
+      <form 
+        action="{{ route('products.update', { id: product.id }) }}" 
+        method="POST" 
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+        <input type="hidden" name="_method" value="PATCH">
+
+        <!-- Nome do Produto -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-800 mb-2">Nome do Produto</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            value="{{ product.name }}" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+            required
+          />
+        </div>
+
+        <!-- Preço do Produto -->
+        <div>
+          <label for="price" class="block text-sm font-medium text-gray-800 mb-2">Preço (R$)</label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            value="{{ product.price }}" 
+            step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+            required
+          />
+        </div>
+
+        <!-- Estoque do Produto -->
+        <div>
+          <label for="stock" class="block text-sm font-medium text-gray-800 mb-2">Estoque</label>
+          <input 
+            type="number" 
+            id="stock" 
+            name="stock" 
+            value="{{ product.stock }}" 
+            min="0"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+            required
+          />
+        </div>
+
+        <!-- Categoria -->
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-800 mb-2">Categoria</label>
+          <select 
+            id="category" 
+            name="categoryId" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+            required
+          >
+            @each(category in categories)
+              <option value="{{ category.id }}" {{ product.categoryId === category.id ? 'selected' : '' }}>
+                {{ category.name }}
+              </option>
+            @endeach
+          </select>
+        </div>
+
+        <!-- Imagem do Produto -->
+        <div>
+          <label for="image" class="block text-sm font-medium text-gray-800 mb-2">Imagem do Produto</label>
+          <input 
+            type="file" 
+            id="image" 
+            name="image" 
+            accept="image/*"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+          />
+          @if(product.imageUrl)
+            <p class="mt-2 text-sm text-gray-600">Imagem atual:</p>
+            <img 
+              src="{{ product.imageUrl }}" 
+              alt="{{ product.name }}" 
+              class="w-full h-auto mt-2 rounded-lg shadow"
+            />
+          @endif
+        </div>
+
+        <!-- Descrição -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-800 mb-2">Descrição do Produto</label>
+          <textarea 
+            id="description" 
+            name="description" 
+            rows="4"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+            required
+          >{{ product.description }}</textarea>
+        </div>
+
+        <!-- Botão de Salvar -->
+        <div class="text-right">
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-[#ffcd85] text-gray-800 font-medium rounded-lg shadow hover:bg-[#ffb95e] transition"
+          >
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+@end

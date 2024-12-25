@@ -1,0 +1,270 @@
+<header class="bg-[#f0e0c2] text-black p-4 w-full fixed top-0 left-0 right-0 shadow-lg z-50">
+  <div class="flex items-center justify-between max-w-screen-xl mx-auto px-4">
+    <!-- Logo -->
+    <a href="/" class="flex items-center space-x-2 hover:scale-105 transform transition duration-300">
+      <img src="/images/logonova (1).png" alt="Logo Capivibes" class="w-24 h-24">
+    </a>
+
+    <!-- Barra de Pesquisa -->
+    <div class="relative w-[30rem]" x-data="search">
+      <div class="relative">
+        <input 
+          type="text" 
+          placeholder="Pesquise aqui" 
+          class="bg-gray-200 text-black placeholder-gray-600 px-4 py-2 rounded-full w-full focus:outline-none focus:ring-2 focus:ring-[#ffcd85]"
+          x-model="search"
+          @input.debounce.300ms="fetchResults"
+        >
+        <button class="absolute right-0 top-0 h-full bg-[#ffcd85] rounded-r-full px-3 flex items-center justify-center hover:bg-[#ffb95e] transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24">
+            <circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+            <line x1="14" y1="14" x2="20" y2="20" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Resultados da Pesquisa -->
+      <div 
+        class="absolute bg-white border border-gray-300 rounded-lg shadow-lg mt-2 w-full max-h-64 overflow-auto z-50"
+        x-show="results.length > 0"
+        @click.away="results = []"
+        x-transition
+      >
+        <template x-for="product in results" :key="product.id">
+          <a :href="`/products/${product.id}`" class="block px-4 py-2 hover:bg-gray-100">
+            <div class="flex items-center space-x-4">
+              <img :src="product.imageUrl || 'https://via.placeholder.com/50'" alt="" class="w-10 h-10 rounded-lg">
+              <div>
+                <p class="font-medium text-gray-800" x-text="product.name"></p>
+                <p class="text-sm text-gray-600" x-text="`R$ ${product.price.toFixed(2)}`"></p>
+
+              </div>
+            </div>
+          </a>
+        </template>
+      </div>
+    </div>
+
+    <!-- Links de Acesso e Carrinho -->
+    <div class="flex items-center space-x-12">
+      <!-- Nossos Contatos -->
+      <div x-data="{ open: false }" class="relative inline-block text-center">
+        <button @click="open = ! open" class="text-black flex flex-col items-center hover:scale-105 transition transform duration-300">
+          <div class="flex items-center">
+            <svg class="w-6 h-6 text-black mr-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M2.003 5.884L10 10l7.997-4.116A2 2 0 0016.89 4H3.109a2 2 0 00-1.106.884zM10 12L2.003 7.116A2 2 0 001 9v5a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-1.003-1.884L10 12z"/>
+            </svg>
+            <div class="flex flex-col ml-1">
+              <span class="text-sm">Nossos</span>
+              <span class="font-bold text-sm">Contatos</span>
+            </div>
+          </div>
+        </button>
+        <div x-cloak x-show="open" @click.away="open = false" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-y-0"
+             x-transition:enter-end="opacity-100 transform scale-y-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-y-100"
+             x-transition:leave-end="opacity-0 transform scale-y-0"
+             class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white border rounded-lg shadow-lg z-20 p-4 text-left text-black origin-top">
+          <p class="text-black"><strong>WhatsApp:</strong> (65) 3055-6650</p>
+          <hr class="my-2 border-gray-300">
+          <p class="text-black"><strong>Telefone:</strong> (65) 3055-6650</p>
+          <hr class="my-2 border-gray-300">
+          <p class="text-black"><strong>E-mail:</strong> capivibes@mcapi.br</p>
+          <hr class="my-2 border-gray-300">
+          <p class="text-black"><strong>Horário de Atendimento:</strong> Segunda à Sexta das 8:00 às 18:00</p>
+        </div>
+      </div>
+
+      <!-- Entrar ou Cadastrar / Perfil do Usuário -->
+      <div class="relative inline-block text-center">
+        @if(auth.user)
+          <div x-data="{ open: false }" class="relative">
+            <button @click="open = ! open" class="text-black flex items-center space-x-1 hover:scale-105 transition duration-300">
+              <div class="flex flex-col text-left">
+                <span class="text-sm">Bem-vindo(a),</span>
+                <span class="font-bold text-sm">{{ auth.user.fullName }}</span>
+              </div>
+            </button>
+            <div x-cloak x-show="open" @click.away="open = false"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform scale-y-0"
+                 x-transition:enter-end="opacity-100 transform scale-y-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 transform scale-y-100"
+                 x-transition:leave-end="opacity-0 transform scale-y-0"
+                 class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white border rounded-lg shadow-lg z-20 origin-top">
+            @if(auth.user.isAdmin)
+              <a href="{{ route('products.admin') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Gerenciar Produtos</a>
+              <a href="{{ route('categories.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Gerenciar Categorias</a>
+            @endif
+              <a href="/perfil" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Ver Perfil</a>
+              <a href="{{ route('auth.destroy') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Sair</a>
+            </div>
+          </div>
+        @else
+          <div x-data="{ open: false }" class="relative">
+            <button @click="open = ! open" class="text-black flex items-center space-x-1 hover:scale-105 transition duration-300">
+              <svg class="w-6 h-6 text-black mr-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M10 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4zM10 2a4 4 0 110 8 4 4 0 010-8z"/>
+              </svg>
+              <div class="flex flex-col text-left">
+                <span class="text-sm">Bem-vindo(a)</span>
+                <span class="font-bold text-sm">
+                  Entrar <span class="font-normal">ou</span> <span class="font-bold">Cadastrar</span>
+                </span>
+              </div>
+            </button>
+            <div x-cloak x-show="open" @click.away="open = false" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform scale-y-0"
+                 x-transition:enter-end="opacity-100 transform scale-y-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 transform scale-y-100"
+                 x-transition:leave-end="opacity-0 transform scale-y-0"
+                 class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white border rounded-lg shadow-lg z-20 origin-top">
+              <a href="/login" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Entrar Agora</a>
+              <a href="/user" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 border-t">Criar Conta</a>
+            </div>
+          </div>
+        @endif
+      </div>
+
+      <!-- Links e Carrinho -->
+    <div class="flex items-center space-x-12" x-data="cart" x-init="fetchCart()">
+      <!-- Carrinho -->
+      <button 
+        class="flex items-center space-x-1 font-bold text-black hover:scale-105 transition duration-300"
+        @click="isDrawerOpen = !isDrawerOpen"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M3 3h2l.36 2.03L7.6 11h8.8l1.14-3.97A1 1 0 0016.6 6H6.4l-1-5H3zm6 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4z"/>
+        </svg>
+        <span>Carrinho</span>
+        <span x-text="cartItems ? `(${cartItems.length})` : '(0)'"></span>
+      </button>
+
+<!-- Slide-in Drawer -->
+<div 
+  c<div 
+  class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-40 transform transition-transform duration-300"
+  :class="{ 'translate-x-0': isDrawerOpen, 'translate-x-full': !isDrawerOpen }"
+  x-cloak
+>
+  <!-- Cabeçalho do slide -->
+  <div class="p-4 flex items-center justify-between bg-[#d9c2a2] shadow-md border-b">
+    <h2 class="text-lg font-bold">Seu Carrinho</h2>
+    <button 
+      @click="isDrawerOpen = false" 
+      class="text-red-500 font-bold hover:underline"
+    >
+      Fechar
+    </button>
+  </div>
+  
+  <!-- Conteúdo do carrinho -->
+  <div class="p-4 overflow-y-auto" style="height: calc(100% - 8rem);"> <!-- Reduzi a altura -->
+    <template x-if="cartItems.length > 0">
+      <template x-for="item in cartItems" :key="item.id">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-4">
+            <img :src="item.imageUrl || '/images/placeholder.png'" alt="" class="w-16 h-16 rounded-lg object-cover">
+            <div>
+              <h3 class="font-bold text-gray-800" x-text="item.name"></h3>
+              <p class="text-sm text-gray-500">Qtd: <span x-text="item.quantity"></span></p>
+              <p class="text-sm text-gray-500">Preço: R$ <span x-text="item.price.toFixed(2)"></span></p>
+            </div>
+          </div>
+          <button 
+            @click="removeItem(item.id)" 
+            class="text-white font-semibold bg-red-500 px-3 py-1 rounded-md shadow-md hover:bg-red-600 transition text-sm"
+          >
+            Remover
+          </button>
+        </div>
+      </template>
+    </template>
+    <template x-if="cartItems.length === 0">
+      <p class="text-gray-500 text-center">Seu carrinho está vazio.</p>
+    </template>
+  </div>
+  
+  <!-- Rodapé com botão -->
+  <div class="p-4 bg-[#f0e0c2] border-t shadow-md flex justify-center fixed bottom-0 w-80"> <!-- Fixei o botão -->
+    <a 
+      href="/cart"
+      class="bg-[#ffcd85] text-gray-800 px-5 py-2 rounded-md font-semibold hover:bg-[#ffb95e] transition text-center"
+    >
+      Ver Carrinho Completo
+    </a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('cart', () => ({
+      isDrawerOpen: false,
+      cartItems: [],
+
+      async fetchCart() {
+        try {
+          const response = await axios.get('/api/cart');
+          this.cartItems = response.data || [];
+        } catch (error) {
+          console.error('Erro ao carregar o carrinho:', error);
+          this.cartItems = [];
+        }
+      },
+
+      removeItem(id) {
+  // Remove localmente para dar feedback imediato
+  this.cartItems = this.cartItems.filter(item => item.id !== id);
+
+  // Atualizar no servidor
+  axios.post(`/cart/${id}/remove`)
+    .then(() => {
+      console.log('Item removido do carrinho no servidor.');
+    })
+    .catch((error) => {
+      console.error('Erro ao remover o item do servidor:', error);
+      // Recarregar o estado do carrinho caso algo falhe
+      this.fetchCart();
+    });
+}
+
+    }));
+
+    Alpine.data('search', () => ({
+      search: '',
+      results: [],
+      async fetchResults() {
+        if (this.search.trim() === '') {
+          this.results = [];
+          return;
+        }
+        try {
+          const response = await axios.get('/api/products/search', {
+            params: { query: this.search },
+          });
+          this.results = response.data;
+        } catch (error) {
+          console.error('Erro ao buscar produtos:', error);
+          this.results = [];
+        }
+      },
+    }));
+  });
+</script>

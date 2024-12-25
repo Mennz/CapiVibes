@@ -1,0 +1,101 @@
+@layouts.app()
+<main class="bg-white min-h-screen py-16 flex items-center justify-center">
+  <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <div class="bg-[#f0e0c2] p-6 rounded-t-lg shadow-sm text-center">
+      <h1 class="text-2xl font-bold text-gray-800">Adicionar Produto</h1>
+      <p class="text-sm text-gray-600">Preencha as informações do novo produto</p>
+    </div>
+
+    <div class="p-6">
+      @form({ action: route('products.store'), method: 'POST', enctype: 'multipart/form-data' })
+        <!-- Nome -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            class="w-full px-4 py-2 border rounded-lg shadow-sm"
+          />
+        </div>
+
+        <!-- Preço -->
+        <div class="mt-4">
+          <label for="price" class="block text-sm font-medium text-gray-700">Preço</label>
+          <input
+            type="number"
+            name="price"
+            id="price"
+            step="0.01"
+            required
+            class="w-full px-4 py-2 border rounded-lg shadow-sm"
+          />
+        </div>
+
+        <!-- Descrição -->
+        <div class="mt-4">
+          <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+          <textarea
+            name="description"
+            id="description"
+            rows="3"
+            class="w-full px-4 py-2 border rounded-lg shadow-sm"
+          ></textarea>
+        </div>
+
+        <div class="mb-4">
+  <label for="stock" class="block text-gray-700">Estoque</label>
+  <input
+    type="number"
+    name="stock"
+    id="stock"
+    class="w-full border border-gray-300 rounded-lg px-4 py-2"
+    placeholder="Digite a quantidade em estoque"
+    value="0"
+    min="0"
+    required
+  />
+</div>
+
+        <!-- Categoria -->
+        <div class="mt-4">
+          <label for="categoryId" class="block text-sm font-medium text-gray-700">Categoria</label>
+          <select
+            name="categoryId"
+            id="categoryId"
+            required
+            class="w-full px-4 py-2 border rounded-lg shadow-sm"
+          >
+            <option value="" disabled selected>Selecione</option>
+            @each(category in categories)
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            @endeach
+          </select>
+        </div>
+
+        <!-- Imagem -->
+        <div class="mt-4">
+          <label for="image" class="block text-sm font-medium text-gray-700">Imagem</label>
+          <input
+            type="file"
+            name="image"
+            id="image"
+            accept="image/*"
+            class="w-full px-4 py-2 border rounded-lg shadow-sm"
+          />
+        </div>
+
+        <div class="mt-6 text-right">
+          <button
+            type="submit"
+            class="px-6 py-2 bg-[#ffcd85] text-gray-800 rounded-lg shadow hover:bg-[#ffb95e]"
+          >
+            Salvar
+          </button>
+        </div>
+      @end
+    </div>
+  </div>
+</main>
+@end

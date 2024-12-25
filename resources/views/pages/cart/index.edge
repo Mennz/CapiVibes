@@ -1,0 +1,66 @@
+@layouts.app()
+
+<main class="bg-white-100 min-h-screen py-16">
+  <div class="container mx-auto px-6">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Carrinho de Compras</h1>
+
+    @if(cart && cart.length > 0)
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="grid grid-cols-1 gap-6">
+          @each(item in cart)
+            <div class="flex items-center justify-between border-b pb-4">
+              <!-- Imagem e Detalhes do Produto -->
+              <div class="flex items-center space-x-4">
+                <img 
+                  src="{{ item.imageUrl || '/images/placeholder.png' }}" 
+                  alt="{{ item.name }}" 
+                  class="w-20 h-20 object-cover rounded-lg shadow"
+                >
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-800">{{ item.name }}</h2>
+                  <p class="text-sm text-gray-500">Quantidade: <span class="font-medium">{{ item.quantity }}</span></p>
+                  <p class="text-sm text-gray-500">Preço Unitário: R$ {{ item.price.toFixed(2) }}</p>
+                  <p class="text-sm text-gray-600 mt-1">Subtotal: <span class="font-bold">R$ {{ (item.price * item.quantity).toFixed(2) }}</span></p>
+                </div>
+              </div>
+
+              <!-- Botão de Remoção -->
+              <form method="POST" action="{{ route('cart.remove', { id: item.id }) }}">
+                <button 
+                  class="px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 transition"
+                >
+                  Remover
+                </button>
+              </form>
+            </div>
+          @endeach
+        </div>
+      </div>
+
+      <!-- Total Geral -->
+      <div class="bg-white rounded-lg shadow-md p-6 mt-6 flex items-center justify-between">
+        <p class="text-lg font-semibold text-gray-800">
+          Total: 
+          <span class="text-green-600 font-bold">R$ {{ cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2) }}</span>
+        </p>
+        <a href="/checkout" 
+          class="bg-green-500 text-white px-6 py-3 rounded-lg shadow hover:bg-green-600 transition"
+        >
+          Finalizar Compra
+        </a>
+      </div>
+    @else
+      <!-- Carrinho Vazio -->
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <p class="text-gray-500 text-lg">Seu carrinho está vazio.</p>
+        <a href="/products" 
+          class="inline-block mt-4 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
+        >
+          Ver Produtos
+        </a>
+      </div>
+    @endif
+  </div>
+</main>
+
+@end

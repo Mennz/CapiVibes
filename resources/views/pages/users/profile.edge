@@ -1,0 +1,47 @@
+@layouts.app()
+<div class="bg-white min-h-screen pt-36 flex items-center justify-center">
+  <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <!-- Header do Perfil -->
+    <div class="bg-[#f0e0c2] p-6 text-center rounded-t-lg shadow-sm">
+      <h1 class="text-2xl font-bold text-gray-800">Perfil de {{ user.fullName }}</h1>
+      <p class="text-sm text-gray-600">{{ user.email }}</p>
+    </div>
+
+    <!-- Informações do Perfil -->
+    <div class="p-6 space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Informações Pessoais -->
+        <div>
+          <h2 class="text-xl font-semibold mb-3 text-gray-700">Informações Pessoais</h2>
+          <p><strong>Nome:</strong> {{ user.fullName }}</p>
+          <p><strong>CPF:</strong> {{ user.cpf }}</p>
+          <p><strong>Data de Nascimento:</strong> {{ user.birthDate.toFormat('dd/MM/yyyy') }}</p>
+        </div>
+
+        <!-- Contato -->
+        <div>
+          <h2 class="text-xl font-semibold mb-3 text-gray-700">Contato</h2>
+          <p><strong>Celular:</strong> {{ user.phone }}</p>
+          <p><strong>Telefone Fixo:</strong> {{ user.landline || 'Não informado' }}</p>
+        </div>
+      </div>
+
+      <!-- Gênero -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700">Gênero</h2>
+        <p>{{ user.gender }}</p>
+      </div>
+
+      <!-- Botões de Ações -->
+      <div class="mt-6 flex justify-between">
+        <a href="{{ route('users.edit') }}" class="px-6 py-2 bg-[#ffcd85] text-gray-800 font-semibold rounded-lg shadow hover:bg-[#ffb95e] transition">
+          Editar Perfil
+        </a>
+        <a href="{{ route('auth.destroy') }}" class="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition">
+          Sair da Conta
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+@end

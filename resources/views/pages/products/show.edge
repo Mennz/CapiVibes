@@ -1,0 +1,101 @@
+@layouts.app()
+
+<main class="bg-white min-h-screen py-40">
+  <div class="container mx-auto px-4">
+    <!-- Detalhes do Produto -->
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Imagem do Produto -->
+        <div>
+          <img
+            src="{{ product.imageUrl ? product.imageUrl : 'https://via.placeholder.com/500' }}"
+            alt="{{ product.name }}"
+            class="w-full h-auto rounded-lg shadow"
+          />
+        </div>
+
+        <!-- Informações do Produto -->
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">{{ product.name }}</h1>
+
+          <p class="text-indigo-600 font-semibold text-2xl mt-4">
+            R$ {{ product.price.toFixed(2) }}
+          </p>
+
+          <p class="text-sm text-gray-600 mt-4">
+            Categoria: <span class="font-medium">{{ product.category.name }}</span>
+          </p>
+
+          <!-- Exibição do Estoque -->
+          <p class="text-sm text-gray-600 mt-4">
+            Estoque:
+            <span class="{{ product.stock > 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium' }}">
+              {{ product.stock > 0 ? product.stock + ' disponível' : 'Sem estoque' }}
+            </span>
+          </p>
+
+          <!-- Descrição do Produto -->
+          <h2 class="text-xl font-semibold text-gray-800 mt-6">Descrição do Produto:</h2>
+          <p class="text-gray-600 mt-2">{{ product.description }}</p>
+
+          <!-- Formulário de Compra -->
+          <form
+            method="POST"
+            action="{{ route('cart.add') }}"
+            class="mt-6 flex items-center space-x-4"
+            x-data="{
+              quantity: 1,
+              maxStock: {{ product.stock }},
+            }"
+          >
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            <input type="hidden" name="productId" value="{{ product.id }}" />
+
+            <!-- Botões para Alterar Quantidade -->
+<div class="flex items-center space-x-2">
+  <button 
+    type="button" 
+    class="px-3 py-2 rounded-md"
+    :class="quantity > 1 ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-400 cursor-not-allowed'"
+    @click="quantity = Math.max(1, quantity - 1)"
+    :disabled="quantity <= 1"
+  >
+    −
+  </button>
+  <input
+    type="number"
+    name="quantity"
+    x-model="quantity"
+    min="1"
+    :max="maxStock"
+    class="border rounded px-3 py-2 w-16 text-center"
+    :disabled="maxStock === 0"
+  />
+  <button 
+    type="button" 
+    class="px-3 py-2 rounded-md"
+    :class="quantity < maxStock ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-400 cursor-not-allowed'"
+    @click="quantity = Math.min(maxStock, quantity + 1)"
+    :disabled="quantity >= maxStock"
+  >
+    +
+  </button>
+</div>
+
+
+            <!-- Botão de Adicionar ao Carrinho -->
+            <button
+              type="submit"
+              class="px-6 py-3 bg-[#ffcd85] text-gray-800 font-medium rounded-lg shadow hover:bg-[#ffb95e] transition {{ product.stock > 0 ? '' : 'cursor-not-allowed opacity-50' }}"
+              :disabled="quantity > maxStock || maxStock === 0"
+            >
+              Adicionar ao Carrinho
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+@end

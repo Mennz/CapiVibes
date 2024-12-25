@@ -1,0 +1,100 @@
+@layouts.app()
+<div class="bg-gray-200 min-h-[150vh]">
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#f2e2c4] shadow-md">
+    <!-- Conteúdo do cabeçalho (logotipo, links, etc.) -->
+  </header>
+
+  <div class="pt-32 bg-[#f2e2c4] pb-10">
+    <!-- Hero Section -->
+    <section class="flex items-center justify-center max-w-screen-xl mx-auto py-16 px-8 space-x-8 relative bg-white shadow-md rounded-lg mb-10">
+      <!-- Imagem de Destaque com Fade -->
+      <div class="w-1/2 relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#f2e2c4] via-transparent to-[#f2e2c4]"></div>
+        <img src="/images/capybara-shopping1.png" alt="Capivara com sacolas" class="w-full h-auto rounded-lg shadow-2xl object-cover relative z-10">
+      </div>
+      
+      <!-- Texto Promocional -->
+      <div class="w-1/2 text-left space-y-6">
+        <h2 class="text-4xl font-bold text-gray-800">Produtos em Alta!</h2>
+        <p class="text-xl text-gray-600">Explore nossa seleção de instrumentos com preços especiais. Desfrute da música com estilo e economia!</p>
+        <a href="/products" class="px-6 py-3 mt-4 bg-[#ff7e39] text-white font-semibold rounded-md shadow-lg hover:bg-[#ff5733] transition-all duration-200 inline-block">Ver Produtos</a>
+      </div>
+    </section>
+
+    <!-- Produtos em Destaque -->
+<section class="py-10 bg-white shadow-md rounded-lg my-10 max-w-screen-xl mx-auto">
+  <div class="text-center">
+    <h2 class="text-2xl font-bold mb-8">Destaques da Semana</h2>
+    <div class="grid grid-cols-4 gap-6">
+      @each(product in products)
+        @if(product.stock > 0)
+          <a href="/products/{{ product.id }}" class="border rounded-lg p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 block">
+            <img src="{{ product.imageUrl || '/images/placeholder.png' }}" alt="{{ product.name }}" class="w-full h-32 object-cover mb-4">
+            <h3 class="font-semibold">{{ product.name }}</h3>
+            <p class="text-gray-600">R$ {{ product.price.toFixed(2) }}</p>
+          </a>
+        @else
+          <div class="border rounded-lg p-4 shadow-lg bg-gray-100">
+            <img src="{{ product.imageUrl || '/images/placeholder.png' }}" alt="{{ product.name }}" class="w-full h-32 object-cover mb-4 grayscale">
+            <h3 class="font-semibold text-gray-400">{{ product.name }}</h3>
+            <p class="text-red-600 font-bold">Esgotado</p>
+          </div>
+        @endif
+      @endeach
+    </div>
+  </div>
+</section>
+
+
+    <!-- Categorias com Carrossel -->
+    <section class="bg-white py-10 max-w-screen-xl mx-auto shadow-md rounded-lg mb-10" x-data="carouselCategorias()">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800">Navegue pelas Categorias</h2>
+      </div>
+      <div class="relative flex items-center justify-center">
+        <!-- Botão de navegação esquerda -->
+        <button @click="previous" class="absolute left-10 bg-transparent p-2 rounded-full text-gray-600 hover:bg-gray-200 transition z-10 text-2xl shadow-md">
+          &larr;
+        </button>
+        
+        <!-- Grid de Categorias como Carrossel -->
+        <div class="flex overflow-hidden w-3/4 px-8 justify-center">
+          <div class="flex transition-transform duration-500 ease-in-out space-x-16" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+            @each(category in categories)
+              <a href="/categories/{{ category.id }}" class="flex flex-col items-center min-w-[140px]">
+                <div class="w-28 h-28 bg-cover bg-center rounded-full flex items-center justify-center border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300" style="background-image: url('{{ category.imageUrl || '/images/placeholder-category.png' }}');">
+                </div>
+                <span class="mt-4 font-semibold text-gray-800">{{ category.name }}</span>
+              </a>
+            @endeach
+          </div>
+        </div>
+
+        <!-- Botão de navegação direita -->
+        <button @click="next" class="absolute right-10 bg-transparent p-2 rounded-full text-gray-600 hover:bg-gray-200 transition z-10 text-2xl shadow-md">
+          &rarr;
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+  function carouselCategorias() {
+    return {
+      currentSlide: 0,
+      totalSlides: {{ categories ? Math.ceil(categories.length / 4) : 1 }},
+      next() {
+        if (this.currentSlide < this.totalSlides - 1) {
+          this.currentSlide++;
+        }
+      },
+      previous() {
+        if (this.currentSlide > 0) {
+          this.currentSlide--;
+        }
+      },
+    };
+  }
+  </script>
+</div>
+@end

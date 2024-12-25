@@ -1,0 +1,40 @@
+@layouts.app()
+
+<main class="bg-white min-h-screen py-40">
+  <div class="container mx-auto px-4">
+    <!-- Cabeçalho da Categoria -->
+    <div class="bg-[#f2e2c4] p-6 rounded-lg shadow-md mb-10"> <!-- Ajustei a cor para combinar com o layout -->
+      <h1 class="text-4xl font-bold text-gray-800">{{ category.name }}</h1>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Produtos nesta Categoria</h2>
+
+      @if(products.length > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          @each(product in products)
+            <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+              <img
+                src="{{ product.imageUrl || 'https://via.placeholder.com/200x200' }}"
+                alt="{{ product.name }}"
+                class="w-full h-40 object-cover rounded-lg mb-4"
+              />
+              <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
+              <p class="text-indigo-600 font-semibold mt-2">R$ {{ product.price.toFixed(2) }}</p>
+              <a
+                href="/products/{{ product.id }}"
+                class="mt-4 inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-500 transition"
+              >
+                Ver Detalhes
+              </a>
+            </div>
+          @endeach
+        </div>
+      @else
+        <p class="text-gray-600">Nenhum produto encontrado nesta categoria.</p>
+      @endif
+    </div>
+  </div>
+</main>
+@end

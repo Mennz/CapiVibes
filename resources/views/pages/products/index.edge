@@ -1,0 +1,74 @@
+@layouts.app()
+<main class="bg-white min-h-screen py-40 flex flex-col items-center">
+  <div class="w-full max-w-7xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <!-- Cabeçalho: Pesquisa e Filtros -->
+    <div class="bg-[#f0e0c2] p-6 rounded-t-lg shadow-sm">
+      <form method="GET" action="{{ route('products.index') }}" class="flex flex-wrap gap-6 items-end">
+        <!-- Campo de Pesquisa -->
+        <div class="flex-1">
+          <label for="search" class="text-base font-semibold text-gray-800">Pesquisar Produtos</label>
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Digite o nome do produto"
+            value="{{ request.input('search', '') }}"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+          />
+        </div>
+
+        <!-- Filtro de Categorias -->
+        <div class="relative">
+          <label for="category" class="text-base font-semibold text-gray-800">Filtrar por Categoria</label>
+          <select
+            name="category"
+            id="category"
+            onchange="this.form.submit()"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#ffcd85] focus:outline-none"
+          >
+            <option value="" {{ !request.input('category') ? 'selected' : '' }}>Todas</option>
+            @each(category in categories)
+              <option value="{{ category.id }}" {{ request.input('category') == category.id ? 'selected' : '' }}>
+                {{ category.name }}
+              </option>
+            @endeach
+          </select>
+        </div>
+
+        <!-- Botão de Pesquisa -->
+        <button
+          type="submit"
+          class="px-6 py-2 bg-[#ffcd85] text-gray-800 font-medium rounded-lg shadow hover:bg-[#ffb95e] transition"
+        >
+          Pesquisar
+        </button>
+      </form>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div class="p-6">
+      @if(products && products.length > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          @each(product in products)
+            <div class="bg-white border rounded-lg shadow hover:shadow-md transition-transform duration-200">
+              <a href="{{ route('products.show', { id: product.id }) }}" class="block">
+                <!-- Imagem do Produto -->
+                <img src="{{ product.imageUrl ? product.imageUrl : 'https://via.placeholder.com/300' }}" 
+                     alt="{{ product.name }}" class="w-full h-48 object-cover rounded-t-lg" />
+                <!-- Informações do Produto -->
+                <div class="p-4">
+                  <h2 class="text-lg font-bold text-gray-800">{{ product.name }}</h2>
+                  <p class="text-sm text-gray-600 truncate">{{ product.description }}</p>
+                  <p class="text-indigo-600 font-semibold mt-2">R$ {{ product.price.toFixed(2) }}</p>
+                </div>
+              </a>
+            </div>
+          @endeach
+        </div>
+      @else
+        <p class="text-center text-gray-600">Nenhum produto encontrado para esta categoria.</p>
+      @endif
+    </div>
+  </div>
+</main>
+@end

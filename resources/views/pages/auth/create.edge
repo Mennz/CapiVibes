@@ -1,0 +1,86 @@
+@layouts.app()
+  <div class="flex min-h-screen items-center justify-center bg-white-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-lg p-8">
+      <!-- Título -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900">
+          Login
+        </h1>
+      </div>
+      
+      <!-- Formulário de Login -->
+      <div class="mt-8">
+        @form({
+          action: route('auth.store'),
+          method: 'POST',
+          class: 'space-y-6',
+        })
+          <!-- Campo Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <div class="mt-1">
+              @!input({
+                type: 'email',
+                name: 'email',
+                required: true,
+                class: 'w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-500'
+              })
+            </div>
+          </div>
+
+          <!-- Campo Senha -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+            <div class="mt-1">
+              @!input({
+                type: 'password',
+                name: 'password',
+                required: true,
+                class: 'w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-500'
+              })
+            </div>
+          </div>
+
+          <!-- Opções de Login -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input name="remember_me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="remember_me" class="ml-2 block text-sm text-gray-900">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Esqueceu a senha?</a>
+            </div>
+          </div>
+
+          <!-- Botão de Login -->
+          <div>
+            @button({
+              type: 'submit',
+              class: 'w-full py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none focus:ring focus:ring-indigo-500'
+            })
+              Login
+            @end
+          </div>
+        @end
+
+        <!-- Botão de Login com Google -->
+        <div class="mt-6">
+          <a href="/login/google" class="w-full inline-flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <img src="/images/googleicone.png" class="w-5 h-5 mr-2" alt="Google Icon" />
+            Continuar com Google
+          </a>
+        </div>
+
+        <!-- Link para Criar Conta -->
+        <div class="mt-6 text-center">
+          <span class="text-sm text-gray-600">
+            Não tem conta?
+            <a href="{{ route('users.create') }}" class="font-semibold text-indigo-600 hover:text-indigo-800">
+              Criar conta
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+@end

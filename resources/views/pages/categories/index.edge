@@ -1,0 +1,65 @@
+@layouts.app()
+<main class="bg-white min-h-screen py-40">
+  <div class="container mx-auto px-4">
+    <!-- Título -->
+    <div class="bg-[#f0e0c2] p-6 rounded-t-lg shadow-sm text-center">
+      <h1 class="text-3xl font-bold text-gray-800">Gerenciar Categorias</h1>
+      <p class="text-sm text-gray-600">Adicione, edite ou remova categorias existentes</p>
+    </div>
+
+    <!-- Botão Nova Categoria -->
+    <div class="text-right mt-6">
+      <a href="{{ route('categories.create') }}" 
+         class="px-4 py-2 bg-[#ffcd85] text-gray-800 font-medium rounded-lg shadow hover:bg-[#ffb95e] transition">
+        Nova Categoria
+      </a>
+    </div>
+
+    <!-- Lista de Categorias -->
+    <div class="overflow-x-auto mt-6">
+      <table class="min-w-full bg-white border rounded-lg shadow">
+        <thead class="bg-gray-100 border-b">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Nome</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @if(categories && categories.length > 0)
+            @each(category in categories)
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ category.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ category.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <div class="flex justify-between items-center space-x-4">
+                    <!-- Botão Editar -->
+                    <a href="{{ route('categories.edit', { id: category.id }) }}" 
+                       class="text-blue-500 font-bold hover:underline">
+                      Editar
+                    </a>
+                    <!-- Botão Excluir -->
+                    <form action="{{ route('categories.destroy', { id: category.id }) }}" method="POST">
+                      <button
+                        type="submit"
+                        class="text-red-500 font-bold hover:underline"
+                        onclick="return confirm('Deseja realmente excluir esta categoria?');"
+                      >
+                        Excluir
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            @endeach
+          @else
+            <tr>
+              <td colspan="3" class="px-6 py-4 text-center text-gray-600">Nenhuma categoria encontrada.</td>
+            </tr>
+          @endif
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+@end
